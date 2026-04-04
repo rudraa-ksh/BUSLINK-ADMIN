@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BusLink Admin Dashboard — Manage buses, drivers, routes, and mappings.">
+  <title>BusLink Admin</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="icon" type="resources\Logo.png" href="favicon.ico">
+</head>
+
+<body>
+  <div class="dashboard-wrapper">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div class="logo-container">
+        <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="30" cy="30" r="28" fill="#0f7a3c" opacity="0.12" />
+          <circle cx="30" cy="30" r="22" fill="#0f7a3c" opacity="0.2" />
+          <circle cx="30" cy="30" r="16" fill="#0f7a3c" />
+          <text x="30" y="27" text-anchor="middle" fill="white" font-size="7" font-family="Inter, sans-serif"
+            font-weight="700">वाहन</text>
+          <text x="30" y="37" text-anchor="middle" fill="white" font-size="5" font-family="Inter, sans-serif"
+            font-weight="500">BusLink</text>
+        </svg>
+      </div>
+      <div class="header-actions">
+        <div class="admin-badge" id="admin-info">
+          <span class="avatar" id="admin-avatar">A</span>
+          <span id="admin-name">Admin</span>
+        </div>
+        <button class="btn-logout" id="btn-logout">Logout</button>
+      </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-navigation" id="tab-navigation">
+      <button class="tab-btn" data-tab="mappings">Mappings</button>
+      <button class="tab-btn active" data-tab="buses">Buses</button>
+      <button class="tab-btn" data-tab="drivers">Drivers</button>
+      <button class="tab-btn" data-tab="routes">Routes</button>
+      <button class="tab-btn" data-tab="stops">Stops</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="dashboard-content">
+
+      <!-- ═══ Mappings Tab ═══ -->
+      <section class="tab-panel" id="panel-mappings">
+        <div class="toolbar">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="mapping-search" placeholder="Search mappings...">
+          </div>
+          <div class="toolbar-spacer"></div>
+          <button class="btn-primary" id="btn-new-mapping">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            New Mapping
+          </button>
+        </div>
+        <div id="mappings-content"></div>
+      </section>
+
+      <!-- ═══ Buses Tab ═══ -->
+      <section class="tab-panel active" id="panel-buses">
+        <div class="toolbar">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="bus-search" placeholder="Search bus...">
+          </div>
+          <div class="filter-bar" id="bus-filters">
+            <button class="filter-icon-btn" title="Filters">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46" />
+              </svg>
+            </button>
+            <button class="filter-chip" data-filter="sort" data-value="A-Z">A-Z ▾</button>
+            <button class="filter-chip" data-filter="status" data-value="">Status ▾</button>
+            <button class="filter-chip" data-filter="pucStatus" data-value="">PUC ▾</button>
+            <button class="filter-chip" data-filter="insuranceStatus" data-value="">Insurance ▾</button>
+            <button class="filter-chip" data-filter="type" data-value="">Type ▾</button>
+            <button class="filter-chip" data-filter="sort" data-value="odometer-desc">Odometer ▾</button>
+          </div>
+          <div class="toolbar-spacer"></div>
+          <button class="btn-primary" id="btn-new-bus">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            New Bus
+          </button>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table" id="buses-table">
+            <thead>
+              <tr>
+                <th>Registration Number</th>
+                <th>Odometer</th>
+                <th>Insurance</th>
+                <th>PUC</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Date of Joining</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="buses-tbody">
+              <tr>
+                <td colspan="8">
+                  <div class="skeleton skeleton-row"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══ Drivers Tab ═══ -->
+      <section class="tab-panel" id="panel-drivers">
+        <div class="toolbar">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="driver-search" placeholder="Search driver...">
+          </div>
+          <div class="toolbar-spacer"></div>
+          <button class="btn-primary" id="btn-new-driver">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            New Driver
+          </button>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table" id="drivers-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Assigned Bus</th>
+                <th>Assigned Route</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="drivers-tbody">
+              <tr>
+                <td colspan="7">
+                  <div class="skeleton skeleton-row"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══ Routes Tab ═══ -->
+      <section class="tab-panel" id="panel-routes">
+        <div class="toolbar">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="route-search" placeholder="Search routes...">
+          </div>
+          <div class="toolbar-spacer"></div>
+          <button class="btn-primary" id="btn-new-route">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            New Route
+          </button>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table" id="routes-table">
+            <thead>
+              <tr>
+                <th>Route Name</th>
+                <th>City</th>
+                <th>Stops</th>
+                <th>Distance</th>
+                <th>Buses</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="routes-tbody">
+              <tr>
+                <td colspan="7">
+                  <div class="skeleton skeleton-row"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ═══ Stops Tab ═══ -->
+      <section class="tab-panel" id="panel-stops">
+        <div class="toolbar">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="stop-search" placeholder="Search stops...">
+          </div>
+          <div class="toolbar-spacer"></div>
+          <button class="btn-primary" id="btn-new-stop">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            New Stop
+          </button>
+        </div>
+        <div class="data-table-wrapper">
+          <table class="data-table" id="stops-table">
+            <thead>
+              <tr>
+                <th>Stop Name</th>
+                <th>City</th>
+                <th>Coordinates</th>
+                <th>Amenities</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="stops-tbody">
+              <tr>
+                <td colspan="5">
+                  <div class="skeleton skeleton-row"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ═══ Modals ═══ -->
+  <!-- Bus Modal -->
+  <div class="modal-overlay" id="bus-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="bus-modal-title">New Bus</h2>
+        <button class="modal-close" data-close="bus-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="bus-form">
+          <input type="hidden" id="bus-edit-id">
+          <div class="form-group">
+            <label for="bus-plate">Registration Number</label>
+            <input type="text" class="form-control" id="bus-plate" placeholder="e.g. CG04AB1234" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bus-type">Type</label>
+              <select class="form-control" id="bus-type">
+                <option value="AC">AC</option>
+                <option value="Non-AC">Non-AC</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="bus-status">Status</label>
+              <select class="form-control" id="bus-status">
+                <option value="idle">Idle</option>
+                <option value="active">Active</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bus-capacity">Capacity</label>
+              <input type="number" class="form-control" id="bus-capacity" value="40" min="1">
+            </div>
+            <div class="form-group">
+              <label for="bus-odometer">Odometer (km)</label>
+              <input type="number" class="form-control" id="bus-odometer" value="0" min="0" step="0.1">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="bus-insurance">Insurance Expiry</label>
+              <input type="date" class="form-control" id="bus-insurance">
+            </div>
+            <div class="form-group">
+              <label for="bus-puc">PUC Expiry</label>
+              <input type="date" class="form-control" id="bus-puc">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="bus-modal">Cancel</button>
+        <button class="btn-primary" id="bus-submit-btn">Create Bus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Driver Modal -->
+  <div class="modal-overlay" id="driver-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="driver-modal-title">New Driver</h2>
+        <button class="modal-close" data-close="driver-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="driver-form">
+          <input type="hidden" id="driver-edit-id">
+          <div class="form-group">
+            <label for="driver-name">Full Name</label>
+            <input type="text" class="form-control" id="driver-name" placeholder="e.g. Amit Kumar" required>
+          </div>
+          <div class="form-group">
+            <label for="driver-email">Email</label>
+            <input type="email" class="form-control" id="driver-email" placeholder="driver@example.com" required>
+          </div>
+          <div class="form-group" id="driver-password-group">
+            <label for="driver-password">Password</label>
+            <input type="password" class="form-control" id="driver-password" placeholder="Min 8 characters"
+              minlength="8">
+          </div>
+          <div class="form-group" id="driver-status-group" style="display:none">
+            <label for="driver-status">Status</label>
+            <select class="form-control" id="driver-status">
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="driver-modal">Cancel</button>
+        <button class="btn-primary" id="driver-submit-btn">Create Driver</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Route Modal -->
+  <div class="modal-overlay" id="route-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="route-modal-title">New Route</h2>
+        <button class="modal-close" data-close="route-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="route-form">
+          <input type="hidden" id="route-edit-id">
+          <div class="form-group">
+            <label for="route-name">Route Name</label>
+            <input type="text" class="form-control" id="route-name" placeholder="e.g. Route 3 — Pandri to Airport"
+              required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="route-city">City</label>
+              <input type="text" class="form-control" id="route-city" value="Raipur">
+            </div>
+            <div class="form-group">
+              <label for="route-distance">Distance (km)</label>
+              <input type="number" class="form-control" id="route-distance" step="0.1" min="0">
+            </div>
+          </div>
+          <div class="form-group" id="route-active-group" style="display:none">
+            <label for="route-active">Status</label>
+            <select class="form-control" id="route-active">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stops (in order)</label>
+            <div id="route-stops-list"></div>
+            <button type="button" class="btn-secondary btn-sm" id="btn-add-stop" style="margin-top:8px">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Stop
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="route-modal">Cancel</button>
+        <button class="btn-primary" id="route-submit-btn">Create Route</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stop Modal -->
+  <div class="modal-overlay" id="stop-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="stop-modal-title">New Stop</h2>
+        <button class="modal-close" data-close="stop-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="stop-form">
+          <input type="hidden" id="stop-edit-id">
+          <div class="form-group">
+            <label for="stop-name">Stop Name</label>
+            <input type="text" class="form-control" id="stop-name" placeholder="e.g. Pandri Bus Stand" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="stop-city">City</label>
+              <input type="text" class="form-control" id="stop-city" value="Raipur">
+            </div>
+            <div class="form-group">
+              <label for="stop-amenities">Amenities (comma separated)</label>
+              <input type="text" class="form-control" id="stop-amenities" placeholder="e.g. Seating, Shade">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="stop-lat">Latitude</label>
+              <input type="number" class="form-control" id="stop-lat" step="any" required>
+            </div>
+            <div class="form-group">
+              <label for="stop-lng">Longitude</label>
+              <input type="number" class="form-control" id="stop-lng" step="any" required>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="stop-modal">Cancel</button>
+        <button class="btn-primary" id="stop-submit-btn">Create Stop</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mapping Modal -->
+  <div class="modal-overlay" id="mapping-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="mapping-modal-title">New Mapping</h2>
+        <button class="modal-close" data-close="mapping-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="mapping-form">
+          <div class="form-group">
+            <label for="mapping-bus">Bus</label>
+            <select class="form-control" id="mapping-bus" required></select>
+          </div>
+          <div class="form-group">
+            <label for="mapping-route">Route</label>
+            <select class="form-control" id="mapping-route">
+              <option value="">— No route change —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="mapping-driver">Driver</label>
+            <select class="form-control" id="mapping-driver">
+              <option value="">— No driver change —</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-close="mapping-modal">Cancel</button>
+        <button class="btn-primary" id="mapping-submit-btn">Assign</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script type="module" src="/js/app.js"></script>
+</body>
+
+</html>

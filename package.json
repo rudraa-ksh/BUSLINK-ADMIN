@@ -1,0 +1,15 @@
+{
+  "name": "buslink-admin",
+  "version": "1.0.0",
+  "description": "BusLink Admin Dashboard — Manage buses, drivers, routes, and mappings",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^6.3.1"
+  }
+}
