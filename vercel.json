@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://buslink-back-end.onrender.com/api/:path*"
-    }
-  ]
-}
