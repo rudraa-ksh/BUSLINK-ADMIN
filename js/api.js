@@ -3,7 +3,7 @@
  * Centralized API calls with automatic token handling and refresh.
  */
 
-const API = '/api/v1';
+const API = (import.meta.env.VITE_API_URL || '') + '/api/v1';
 
 async function apiRequest(endpoint, options = {}) {
   const token = localStorage.getItem('buslink_admin_access_token');

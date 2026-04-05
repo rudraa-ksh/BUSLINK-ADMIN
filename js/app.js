@@ -43,14 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-logout').addEventListener('click', async () => {
     try {
       const refreshToken = localStorage.getItem('buslink_admin_refresh_token');
-      await fetch('/api/v1/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ refreshToken }),
-      });
+      await api.post('/auth/logout', { refreshToken });
     } catch {
       // Ignore errors on logout
     }
